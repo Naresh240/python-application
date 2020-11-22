@@ -75,6 +75,8 @@ Then, we will see them all running.
 
   ![image](https://user-images.githubusercontent.com/58024415/99900215-5b37bb00-2cd4-11eb-92e7-ba801f3d8b84.png)
 
-Check Output:
-
+# Check Output:
   ![image](https://user-images.githubusercontent.com/58024415/99900232-6db1f480-2cd4-11eb-9cc3-7a8fc1c2829f.png)
+
+# Clean up
+    To clean up the resources we created, we can just delete the cluster.
