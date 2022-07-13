@@ -1,0 +1,39 @@
+version: 2.1
+
+commands:
+  build_push_to_ecr_cmd:
+    steps:
+      - checkout      
+      - run:
+          name: Install dependencies for AWS
+          command: |
+            apk add py-pip
+            pip install awscli
+      - run:
+          name: Build image
+          command: |          
+            docker build -t ${ECR_REPO_NAME}:${IMAGE_TAG} .
+      - run:
+          name: push image
+          command: |
+            eval $(aws ecr get-login --region ${AWS_DEFAULT_REGION} --no-include-email)
+            docker tag ${ECR_REPO_NAME}:${IMAGE_TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPO_NAME}:${IMAGE_TAG}
+            docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPO_NAME}:${IMAGE_TAG}  
+executors:
+  docker-executor:
+    docker:
+      - image: docker:18.06.1-ce-git      
+jobs:
+  build_and_publish_docker_image:
+    executor: docker-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: target
+      - setup_remote_docker
+      - build_push_to_ecr_cmd
+workflows:
+  build_push_image:
+    jobs:
+      - build_and_publish_docker_image:
+          context: aws_ecr_login
