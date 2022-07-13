@@ -28,8 +28,6 @@ jobs:
     executor: docker-executor
     steps:
       - checkout
-      - attach_workspace:
-          at: target
       - setup_remote_docker
       - build_push_to_ecr_cmd
 workflows:
