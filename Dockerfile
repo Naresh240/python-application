@@ -1,8 +1,6 @@
-FROM ubuntu:18.04
-RUN apt-get update -y
-RUN apt-get install -y python-pip python-dev build-essential
-COPY . /app
+FROM python:alpine3.24
 WORKDIR /app
+COPY requirements.txt .
 RUN pip install -r requirements.txt
-ENTRYPOINT ["python"]
-CMD ["home.py"]
+COPY . .
+ENTRYPOINT ["python3", "home.py"]
